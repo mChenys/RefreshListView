@@ -1,8 +1,11 @@
 package mchenys.net.csdn.blog.refreshlistview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
@@ -69,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 List temp = new ArrayList();
                 for (int i = 0; i < 5; i++) {
-
                     temp.add("第" + pageNo + "页,数据" + (i + 1));
                 }
                 if (!isLoadMore) {
@@ -80,5 +82,20 @@ public class MainActivity extends AppCompatActivity {
                 mAdapter.notifyDataSetChanged();
             }
         }, 1000);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_tab, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_pin_header) {
+            startActivity(new Intent(this, PinHeaderListViewActivity.class));
+        }
+        return true;
     }
 }
