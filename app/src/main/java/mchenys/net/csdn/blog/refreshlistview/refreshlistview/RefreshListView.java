@@ -84,7 +84,7 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
             case MotionEvent.ACTION_UP:
                 //up事件需要处理当前为下拉刷新和正在刷新的2种情况
                 if (mHeaderView.isPullToRefresh()) {
-                    mHeaderView.fullyHide();
+                    mHeaderView.fullyHideSmooth();
                 } else if (mHeaderView.isReleaseToRefresh()) {
                     mHeaderView.fullyShow();
                     mHeaderView.setState(RefreshHeaderView.STATE_REFRESHING);
@@ -107,7 +107,7 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
         if (success) {
             mHeaderView.saveRefreshTime();
         }
-        mHeaderView.fullyHide();
+        mHeaderView.fullyHideSmooth();
         mFooterView.fullyHide();
         Log.d(TAG, "下拉或加载更多结束");
 

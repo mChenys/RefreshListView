@@ -1,5 +1,8 @@
 package mchenys.net.csdn.blog.refreshlistview.refreshlistview;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.AttributeSet;
@@ -111,7 +114,28 @@ public class RefreshHeaderView extends FrameLayout {
         mHeaderContent.setPadding(0, -mHeaderViewHeight, 0, 0);
         setState(STATE_PULL_REFRESH);
     }
-
+    /**
+     * 实现HeaderView隐藏的时候平滑的收起效果
+     */
+    public void fullyHideSmooth() {
+        ValueAnimator animator = ValueAnimator.ofInt(mHeaderContent.getPaddingTop(), -mHeaderViewHeight);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                //不断的修改paddingTop的值,达到平滑收起的效果
+                int newPaddingTop = (int) animation.getAnimatedValue();
+                mHeaderContent.setPadding(0,newPaddingTop,0,0);
+            }
+        });
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                setState(STATE_PULL_REFRESH);
+            }
+        });
+        animator.setDuration(500);
+        animator.start();
+    }
     /**
      * 完全显示headerView,通过设置paddingTop为0即可
      */
@@ -171,13 +195,6 @@ public class RefreshHeaderView extends FrameLayout {
         mSharedPreferences.edit().putString("key_refresh_time", mDateFormat.format(new Date())).commit();
     }
 
-    public int getState() {
-        return mState;
-    }
-
-    public int getHeaderViewHeight() {
-        return mHeaderViewHeight;
-    }
 
     public boolean isRefreshing() {
         return mState == STATE_REFRESHING;
@@ -190,4 +207,5 @@ public class RefreshHeaderView extends FrameLayout {
     public boolean isPullToRefresh() {
         return mState == STATE_PULL_REFRESH;
     }
+
 }
